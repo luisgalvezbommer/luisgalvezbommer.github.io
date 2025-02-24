@@ -32,7 +32,7 @@
         }
         .header {
             text-align: center;
-            height: 100vh;
+            min-height: 100vh;
         }
         .header img {
             border-radius: 9999px;
@@ -94,6 +94,13 @@
             border-radius: 9999px;
         }
 
+        #collision_simulator {
+            background-color: black;
+            color: white;
+            padding: 8px;
+            border-radius: 9999px;
+        }
+        
         /* Animation für den Farbwechsel */
         @keyframes backgroundAnimation {
             0% { background-position: 0% 50%; }
@@ -206,12 +213,17 @@
         </div>
         <div class="section apps">
             <a id="app_download" href="app_luisgalvezbommer.apk" download="app_luisgalvezbommer">
-                Meine App herunterladen
+                Meine App herunterladen (APK)
             </a>
         </div>
         <div class="section games">
             <a id="play_game" href="/Prince_Web_Version/Prince_Web_Version.html">
                 Mein Spiel spielen
+            </a>
+        </div>
+        <div class="section games">
+            <a id="collision_simulator" href="/Collision_Simulator/Collision_Simulator.html">
+                Kollisions-Simulator
             </a>
         </div>
     </div>
