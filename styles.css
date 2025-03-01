@@ -102,6 +102,8 @@ a {
 
 #averageDisplay {
     flex-wrap: wrap;
+    font-weight: bold;
+    color: blue;
 }
 
 #chart {

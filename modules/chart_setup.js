@@ -33,7 +33,7 @@ export function initializeChart(ctx) {
         options: {
             scales: {
                 y: {
-                    min: 1,
+                    min: 0,
                     max: 6,
                     title: {
                         display: true,

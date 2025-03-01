@@ -7,9 +7,10 @@ const chart = initializeChart(ctx); // Initialisiere den Chart mit ctx
 chart.update(); // Chart zeichnen
 
 const datasetSelect = document.getElementById("datasetSelect");
+datasetSelect.value = "average"; // Setzt "average" als Standardoption
 
 // Dynamisch alle Subjects als Optionen hinzufügen (überspringt "all" und "mint")
-Object.values(schoolData.subjects).forEach(subject => {
+Object.values(schoolData.subjects).filter(subject=> subject.name !== "Durchschnitt").forEach(subject => {
     const option = document.createElement("option");
     option.value = subject.name;       // z. B. "Mathe"
     option.textContent = subject.name; // z. B. "Mathe"
