@@ -34,20 +34,17 @@
             <div class="grades">
                 <div class="controls">
                     <label for="datasetSelect">Meine Schulnoten:</label>
-                        <select id="datasetSelect">
-                            <option value="all">Alle Datensätze anzeigen</option>
-                            <option value="mint">MINT-Fächer</option>
-                        <!-- Optionen werden per JavaScript eingefügt -->
-                        </select>
+                    <select id="datasetSelect">
+                        <option value="mint">MINT-Fächer</option>
+                        <option value="all">Alle Datensätze anzeigen</option>
+                        <option value="average">Durchschnitt</option>
+                        <hr>
+                    <!-- Optionen werden per JavaScript eingefügt -->
+                    </select>
+                    <span id="averageDisplay">Durchschnitt: 0</span>
                 </div>
-                <div id="chartWithLegends">
-                    <div id="chartContainer">
-                        <canvas id="chart" width="800" height="400"></canvas>
-                        <div id="yLabel" class="axis-label">Note</div>
-                        <div id="xLabel" class="axis-label">Schuljahr</div>
-                    </div>
-                    <div id="legend"></div>
-                </div>
+                <!-- Aktualisierte Chart-Sektion -->
+                <canvas id="chart" width="800" height="400"></canvas>
             </div>
         </div>
         <div class="section experience">
@@ -128,5 +125,8 @@
     </div>
     <img src="assets/images/regenbogen.png" alt="Regenbogen" class="fixed-image">
 </body>
-<script src="index.js"></script>
+<!-- Include Chart.js from a CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Use the new index file -->
+<script type="module" src="index.js"></script>
 </html>
