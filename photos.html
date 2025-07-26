@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bilder Matrix mit Lightbox</title>
+    <style>
+        .image-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .image-item {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .image-item:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Lightbox Styles */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            cursor: pointer;
+        }
+        
+        .lightbox.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .lightbox-image {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .close-button {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1001;
+            transition: color 0.3s ease;
+        }
+        
+        .close-button:hover {
+            color: #ccc;
+        }
+
+        #title {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 2em;
+            color: #333;
+            font-family: sans-serif;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        /* Responsive Design für kleinere Bildschirme */
+        @media (max-width: 768px) {
+            .image-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+            
+            .close-button {
+                font-size: 30px;
+                top: 15px;
+                right: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .image-container {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .lightbox-image {
+                max-width: 95%;
+                max-height: 85%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1 id="title">Mein Lebenslauf in Bildern</h1>
+    <div class="image-container">
+        <img src="assets/photos/luis1998.jpg" alt="Luis 1998" class="image-item" onclick="openLightbox(this)">
+        <img src="assets/photos/luis1999.jpg" alt="Luis 1999" class="image-item" onclick="openLightbox(this)">
+        <img src="assets/photos/luis2001.jpg" alt="Luis 2001" class="image-item" onclick="openLightbox(this)">
+        <img src="assets/photos/luis2003.JPG" alt="Luis 2003" class="image-item" onclick="openLightbox(this)">
+        <img src="assets/photos/luis2004.jpg" alt="Luis 2004" class="image-item" onclick="openLightbox(this)">
+
+        <img src="assets/photos/luis2006.jpg" alt="Luis 2006" class="image-item" onclick="openLightbox(this)">
+        <img src="assets/photos/luis2008.jpg" alt="Luis 2008" class="image-item" onclick="openLightbox(this)">
+        <img src="assets/photos/luis2009.JPG" alt="Luis 2009" class="image-item" onclick="openLightbox(this)">
+        <img src="assets/photos/luis2011.jpg" alt="Luis 2011" class="image-item" onclick="openLightbox(this)">
+        <img src="assets/photos/luis2012.png" alt="Luis 2012" class="image-item" onclick="openLightbox(this)">
+        <img src="assets/photos/luis2014.png" alt="Luis 2014" class="image-item" onclick="openLightbox(this)">
+        <img src="assets/photos/luis2015.jpg" alt="Luis 2015" class="image-item" onclick="openLightbox(this)">
+        <img src="assets/photos/luis2016.jpeg" alt="Luis 2016" class="image-item" onclick="openLightbox(this)">
+        <img src="assets/photos/luis2017.jpg" alt="Luis 2017" class="image-item" onclick="openLightbox(this)">
+        <img src="assets/photos/luis2021.jpg" alt="Luis 2021" class="image-item" onclick="openLightbox(this)">
+        <img src="assets/photos/luis2022.jpg" alt="Luis 2022" class="image-item" onclick="openLightbox(this)">
+        <img src="assets/photos/luis2025.png" alt="Luis 2025" class="image-item" onclick="openLightbox(this)">
+    </div>
+   
+    
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <span class="close-button" onclick="closeLightbox()">&times;</span>
+        <img class="lightbox-image" id="lightbox-image" src="" alt="">
+    </div>
+
+    <script>
+        function openLightbox(imageElement) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImage = document.getElementById('lightbox-image');
+            
+            lightboxImage.src = imageElement.src;
+            lightboxImage.alt = imageElement.alt;
+            lightbox.classList.add('active');
+            
+            // Verhindert das Scrollen der Hauptseite
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.remove('active');
+            
+            // Erlaubt wieder das Scrollen der Hauptseite
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Schließt die Lightbox bei Drücken der Escape-Taste
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeLightbox();
+            }
+        });
+        
+        // Verhindert das Schließen der Lightbox beim Klicken auf das Bild selbst
+        document.getElementById('lightbox-image').addEventListener('click', function(event) {
+            event.stopPropagation();
+        });
+    </script>
+</body>
+</html>
