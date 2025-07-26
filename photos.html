@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bilder Matrix mit Lightbox</title>
+    <title>Bilder</title>
     <style>
         .image-container {
             display: grid;
@@ -48,8 +48,8 @@
         }
         
         .lightbox-image {
-            max-width: 90%;
-            max-height: 90%;
+            max-width: 80%;
+            max-height: 80%;
             object-fit: contain;
             border-radius: 8px;
             box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
@@ -71,6 +71,66 @@
         .close-button:hover {
             color: #ccc;
         }
+        
+        /* Navigation Buttons */
+        .nav-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            font-size: 30px;
+            padding: 15px 20px;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: background-color 0.3s ease;
+            z-index: 1001;
+        }
+        
+        .nav-button:hover {
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+        
+        .prev-button {
+            left: 30px;
+        }
+        
+        .next-button {
+            right: 30px;
+        }
+        
+        /* Image Info Container */
+        .image-info {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 1001;
+        }
+        
+        .image-counter {
+            color: white;
+            font-size: 16px;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 8px 16px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        .image-description {
+            color: white;
+            font-size: 18px;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px 20px;
+            border-radius: 20px;
+            max-width: 80vw;
+            word-wrap: break-word;
+            font-weight: 500;
+            display: inline-block;
+        }
 
         #title {
             text-align: center;
@@ -79,6 +139,7 @@
             color: #333;
             font-family: sans-serif;
         }
+
         
         @keyframes fadeIn {
             from { opacity: 0; transform: scale(0.8); }
@@ -97,6 +158,30 @@
                 top: 15px;
                 right: 20px;
             }
+            
+            .nav-button {
+                font-size: 20px;
+                padding: 10px 15px;
+            }
+            
+            .prev-button {
+                left: 15px;
+            }
+            
+            .next-button {
+                right: 15px;
+            }
+            
+            .lightbox-image {
+                max-width: 90%;
+                max-height: 70%;
+            }
+            
+            .image-description {
+                font-size: 16px;
+                padding: 8px 16px;
+                max-width: 90vw;
+            }
         }
         
         @media (max-width: 480px) {
@@ -107,7 +192,13 @@
             
             .lightbox-image {
                 max-width: 95%;
-                max-height: 85%;
+                max-height: 60%;
+            }
+            
+            .image-description {
+                font-size: 14px;
+                padding: 6px 12px;
+                max-width: 95vw;
             }
         }
     </style>
@@ -115,44 +206,71 @@
 <body>
     <h1 id="title">Mein Lebenslauf in Bildern</h1>
     <div class="image-container">
-        <img src="assets/photos/luis1998.jpg" alt="Luis 1998" class="image-item" onclick="openLightbox(this)">
-        <img src="assets/photos/luis1999.jpg" alt="Luis 1999" class="image-item" onclick="openLightbox(this)">
-        <img src="assets/photos/luis2001.jpg" alt="Luis 2001" class="image-item" onclick="openLightbox(this)">
-        <img src="assets/photos/luis2003.JPG" alt="Luis 2003" class="image-item" onclick="openLightbox(this)">
-        <img src="assets/photos/luis2004.jpg" alt="Luis 2004" class="image-item" onclick="openLightbox(this)">
+        <img src="assets/photos/luis1998.jpg" alt="1998" class="image-item" onclick="openLightbox(0)">
+        <img src="assets/photos/luis1999.jpg" alt="1999" class="image-item" onclick="openLightbox(1)">
+        <img src="assets/photos/luis2001.jpg" alt="2001" class="image-item" onclick="openLightbox(2)">
+        <img src="assets/photos/luis2003.JPG" alt="2003" class="image-item" onclick="openLightbox(3)">
+        <img src="assets/photos/luis2004.jpg" alt="2004" class="image-item" onclick="openLightbox(4)">
 
-        <img src="assets/photos/luis2006.jpg" alt="Luis 2006" class="image-item" onclick="openLightbox(this)">
-        <img src="assets/photos/luis2008.jpg" alt="Luis 2008" class="image-item" onclick="openLightbox(this)">
-        <img src="assets/photos/luis2009.JPG" alt="Luis 2009" class="image-item" onclick="openLightbox(this)">
-        <img src="assets/photos/luis2011.jpg" alt="Luis 2011" class="image-item" onclick="openLightbox(this)">
-        <img src="assets/photos/luis2012.png" alt="Luis 2012" class="image-item" onclick="openLightbox(this)">
-        <img src="assets/photos/luis2014.png" alt="Luis 2014" class="image-item" onclick="openLightbox(this)">
-        <img src="assets/photos/luis2015.jpg" alt="Luis 2015" class="image-item" onclick="openLightbox(this)">
-        <img src="assets/photos/luis2016.jpeg" alt="Luis 2016" class="image-item" onclick="openLightbox(this)">
-        <img src="assets/photos/luis2017.jpg" alt="Luis 2017" class="image-item" onclick="openLightbox(this)">
-        <img src="assets/photos/luis2021.jpg" alt="Luis 2021" class="image-item" onclick="openLightbox(this)">
-        <img src="assets/photos/luis2022.jpg" alt="Luis 2022" class="image-item" onclick="openLightbox(this)">
-        <img src="assets/photos/luis2025.png" alt="Luis 2025" class="image-item" onclick="openLightbox(this)">
+        <img src="assets/photos/luis2006.jpg" alt="2006" class="image-item" onclick="openLightbox(5)">
+        <img src="assets/photos/luis2008.jpg" alt="2008" class="image-item" onclick="openLightbox(6)">
+        <img src="assets/photos/luis2009.JPG" alt="2009" class="image-item" onclick="openLightbox(7)">
+        <img src="assets/photos/luis2011.jpg" alt="2011" class="image-item" onclick="openLightbox(8)">
+        <img src="assets/photos/luis2012.png" alt="2012" class="image-item" onclick="openLightbox(9)">
+        <img src="assets/photos/luis2014.png" alt="2014" class="image-item" onclick="openLightbox(10)">
+        <img src="assets/photos/luis2015.jpg" alt="2015" class="image-item" onclick="openLightbox(11)">
+        <img src="assets/photos/luis2016.jpeg" alt="2016" class="image-item" onclick="openLightbox(12)">
+        <img src="assets/photos/luis2017.jpg" alt="2017" class="image-item" onclick="openLightbox(13)">
+        <img src="assets/photos/luis2021.jpg" alt="2021" class="image-item" onclick="openLightbox(14)">
+        <img src="assets/photos/luis2022.jpg" alt="2022" class="image-item" onclick="openLightbox(15)">
+        <img src="assets/photos/luis2025.png" alt="2025" class="image-item" onclick="openLightbox(16)">
     </div>
-   
     
     <!-- Lightbox -->
     <div class="lightbox" id="lightbox" onclick="closeLightbox()">
         <span class="close-button" onclick="closeLightbox()">&times;</span>
+        <button class="nav-button prev-button" onclick="previousImage(event)">❮</button>
+        <button class="nav-button next-button" onclick="nextImage(event)">❯</button>
         <img class="lightbox-image" id="lightbox-image" src="" alt="">
+        <div class="image-info">
+            <div class="image-counter" id="image-counter">1 / 9</div>
+            <div class="image-description" id="image-description">Luis 1998</div>
+        </div>
     </div>
 
     <script>
-        function openLightbox(imageElement) {
-            const lightbox = document.getElementById('lightbox');
-            const lightboxImage = document.getElementById('lightbox-image');
+        let currentImageIndex = 0;
+        let images = [];
+        
+        // Sammle alle Bilder beim Laden der Seite
+        document.addEventListener('DOMContentLoaded', function() {
+            const imageElements = document.querySelectorAll('.image-item');
+            images = Array.from(imageElements).map(img => ({
+                src: img.src,
+                alt: img.alt
+            }));
+        });
+        
+        function openLightbox(imageIndex) {
+            currentImageIndex = imageIndex;
+            showCurrentImage();
             
-            lightboxImage.src = imageElement.src;
-            lightboxImage.alt = imageElement.alt;
+            const lightbox = document.getElementById('lightbox');
             lightbox.classList.add('active');
             
             // Verhindert das Scrollen der Hauptseite
             document.body.style.overflow = 'hidden';
+        }
+        
+        function showCurrentImage() {
+            const lightboxImage = document.getElementById('lightbox-image');
+            const imageCounter = document.getElementById('image-counter');
+            const imageDescription = document.getElementById('image-description');
+            
+            lightboxImage.src = images[currentImageIndex].src;
+            lightboxImage.alt = images[currentImageIndex].alt;
+            imageCounter.textContent = `${currentImageIndex + 1} / ${images.length}`;
+            imageDescription.textContent = images[currentImageIndex].alt;
         }
         
         function closeLightbox() {
@@ -163,15 +281,54 @@
             document.body.style.overflow = 'auto';
         }
         
-        // Schließt die Lightbox bei Drücken der Escape-Taste
+        function nextImage(event) {
+            event.stopPropagation(); // Verhindert das Schließen der Lightbox
+            currentImageIndex = (currentImageIndex + 1) % images.length;
+            showCurrentImage();
+        }
+        
+        function previousImage(event) {
+            event.stopPropagation(); // Verhindert das Schließen der Lightbox
+            currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+            showCurrentImage();
+        }
+        
+        // Tastatur-Navigation
         document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                closeLightbox();
+            const lightbox = document.getElementById('lightbox');
+            
+            if (lightbox.classList.contains('active')) {
+                switch(event.key) {
+                    case 'Escape':
+                        closeLightbox();
+                        break;
+                    case 'ArrowLeft':
+                        previousImage(event);
+                        break;
+                    case 'ArrowRight':
+                        nextImage(event);
+                        break;
+                }
             }
         });
         
-        // Verhindert das Schließen der Lightbox beim Klicken auf das Bild selbst
+        // Verhindert das Schließen der Lightbox beim Klicken auf das Bild oder die Buttons
         document.getElementById('lightbox-image').addEventListener('click', function(event) {
+            event.stopPropagation();
+        });
+        
+        document.querySelectorAll('.nav-button').forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.stopPropagation();
+            });
+        });
+        
+        // Verhindert das Schließen beim Klicken auf die Bildinfo
+        document.getElementById('image-counter').addEventListener('click', function(event) {
+            event.stopPropagation();
+        });
+        
+        document.getElementById('image-description').addEventListener('click', function(event) {
             event.stopPropagation();
         });
     </script>
