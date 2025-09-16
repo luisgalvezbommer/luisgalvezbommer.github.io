@@ -86,6 +86,13 @@ a {
     border-radius: 9999px;
 }
 
+#iot_dashboard {
+    background-color: #ff4500;
+    color: white;
+    padding: 8px;
+    border-radius: 9999px;
+}
+
 /* Für Noten-Diagramm */
 .controls {
     margin-bottom: 20px;
