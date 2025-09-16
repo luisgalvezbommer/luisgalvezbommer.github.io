@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>3D Avatar Anzeige</title>
+  <style>
+    body { margin: 0; overflow: hidden; background-color: #222; }
+    canvas { display: block; }
+    #loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+    #avatar-info {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      color: white;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 15px;
+      border-radius: 8px;
+      line-height: 1.4;
+      backdrop-filter: blur(5px);
+    }
+    #avatar-info div {
+      margin-bottom: 5px;
+    }
+    #avatar-info div:last-child {
+      margin-bottom: 0;
+    }
+  </style>
+</head>
+<body>
+  <div id="loading">Avatar wird geladen...</div>
+  <div id="avatar-info">
+    <div>Größe: 174 cm</div>
+    <div>Gewicht: 78 kg</div>
+  </div>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+  <script type="module">
+    import * as THREE from 'three';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+    // Loading element verstecken
+    const loadingElement = document.getElementById('loading');
+
+    // Szene, Kamera, Renderer
+    const scene = new THREE.Scene();
+    
+    // Wald-Himmel erstellen (heller und freundlicher)
+    const skyGeometry = new THREE.SphereGeometry(500, 32, 32);
+    const skyMaterial = new THREE.ShaderMaterial({
+      uniforms: {
+        topColor: { value: new THREE.Color(0x4a7c59) }, // Helleres Waldgrün
+        bottomColor: { value: new THREE.Color(0x87ceeb) }, // Heller Himmel durch Lücken
+        offset: { value: 33 },
+        exponent: { value: 0.6 }
+      },
+      vertexShader: `
+        varying vec3 vWorldPosition;
+        void main() {
+          vec4 worldPosition = modelMatrix * vec4(position, 1.0);
+          vWorldPosition = worldPosition.xyz;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
+        uniform vec3 topColor;
+        uniform vec3 bottomColor;
+        uniform float offset;
+        uniform float exponent;
+        varying vec3 vWorldPosition;
+        void main() {
+          float h = normalize(vWorldPosition + offset).y;
+          gl_FragColor = vec4(mix(bottomColor, topColor, max(pow(max(h, 0.0), exponent), 0.0)), 1.0);
+        }
+      `,
+      side: THREE.BackSide
+    });
+    const sky = new THREE.Mesh(skyGeometry, skyMaterial);
+    scene.add(sky);
+    
+    // Waldboden erstellen (heller)
+    const groundGeometry = new THREE.PlaneGeometry(100, 100);
+    const groundMaterial = new THREE.MeshLambertMaterial({ 
+      color: 0x8b7355,  // Hellerer, sandiger Waldboden
+      side: THREE.DoubleSide 
+    });
+    const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+    ground.rotation.x = -Math.PI / 2;
+    ground.position.y = 0; // Genau auf Y=0
+    ground.receiveShadow = true;
+    scene.add(ground);
+    
+    // Blätter und Walddetails
+    for (let i = 0; i < 30; i++) {
+      const leafPatch = new THREE.Mesh(
+        new THREE.PlaneGeometry(Math.random() * 1.5 + 0.3, Math.random() * 1.5 + 0.3),
+        new THREE.MeshLambertMaterial({ 
+          color: new THREE.Color().setHSL(0.08 + Math.random() * 0.15, 0.7, 0.2 + Math.random() * 0.3),
+          transparent: true,
+          opacity: 0.8
+        })
+      );
+      leafPatch.rotation.x = -Math.PI / 2;
+      leafPatch.position.set(
+        (Math.random() - 0.5) * 50,
+        0.01,
+        (Math.random() - 0.5) * 50
+      );
+      scene.add(leafPatch);
+    }
+
+    // Bäume im Hintergrund
+    for (let i = 0; i < 15; i++) {
+      // Baumstamm
+      const trunkGeometry = new THREE.CylinderGeometry(0.3, 0.5, 8);
+      const trunkMaterial = new THREE.MeshLambertMaterial({ color: 0x3a2a1a });
+      const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
+      trunk.position.set(
+        (Math.random() - 0.5) * 80,
+        4,
+        (Math.random() - 0.5) * 80
+      );
+      trunk.castShadow = true;
+      scene.add(trunk);
+
+      // Baumkrone
+      const crownGeometry = new THREE.SphereGeometry(3 + Math.random() * 2, 8, 6);
+      const crownMaterial = new THREE.MeshLambertMaterial({ color: 0x2d5a2d });
+      const crown = new THREE.Mesh(crownGeometry, crownMaterial);
+      crown.position.set(trunk.position.x, 9, trunk.position.z);
+      crown.castShadow = true;
+      scene.add(crown);
+    }
+    
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({antialias: true});
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    document.body.appendChild(renderer.domElement);
+
+    // Helleres Licht für freundlichere Wald-Szene
+    const ambientLight = new THREE.AmbientLight(0x8fbc8f, 0.6); // Helleres, freundliches Waldlicht
+    scene.add(ambientLight);
+
+    const directionalLight = new THREE.DirectionalLight(0xfffacd, 1.2); // Helles, warmes Sonnenlicht
+    directionalLight.position.set(15, 25, 5);
+    directionalLight.castShadow = true;
+    directionalLight.shadow.mapSize.width = 2048;
+    directionalLight.shadow.mapSize.height = 2048;
+    directionalLight.shadow.camera.near = 0.5;
+    directionalLight.shadow.camera.far = 50;
+    directionalLight.shadow.camera.left = -15;
+    directionalLight.shadow.camera.right = 15;
+    directionalLight.shadow.camera.top = 15;
+    directionalLight.shadow.camera.bottom = -15;
+    scene.add(directionalLight);
+
+    // Zusätzliches Fülllicht für noch mehr Helligkeit
+    const fillLight = new THREE.DirectionalLight(0xffffff, 0.4);
+    fillLight.position.set(-10, 15, -5);
+    scene.add(fillLight);
+
+    // Orbit Controls (zum Drehen mit der Maus)
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+
+    // Animation-Variablen
+    let mixer;
+    const clock = new THREE.Clock();
+
+    // GLB laden
+    const loader = new GLTFLoader();
+    loader.load('assets/avatar/avatar.glb', 
+      (gltf) => {
+        const model = gltf.scene;
+        scene.add(model);
+        
+        // Animationen laden und abspielen
+        if (gltf.animations && gltf.animations.length > 0) {
+          mixer = new THREE.AnimationMixer(model);
+          
+          // Erste Animation (meist Idle/Standing) abspielen
+          const action = mixer.clipAction(gltf.animations[0]);
+          action.play();
+          
+          console.log('Verfügbare Animationen:', gltf.animations.map(anim => anim.name));
+          console.log('Spiele Animation ab:', gltf.animations[0].name);
+        } else {
+          console.log('Keine Animationen in der Datei gefunden');
+        }
+        
+        // Modell auf den Boden setzen
+        const box = new THREE.Box3().setFromObject(model);
+        const modelSize = box.getSize(new THREE.Vector3());
+        const center = box.getCenter(new THREE.Vector3());
+        
+        // Avatar horizontal zentrieren, aber auf den Boden setzen
+        model.position.x = -center.x;
+        model.position.z = -center.z;
+        model.position.y = -box.min.y; // Füße direkt auf Y=0 (Boden)
+        
+        // Schatten für Avatar aktivieren und Materialien aufhellen
+        model.traverse((child) => {
+          if (child.isMesh) {
+            child.castShadow = true;
+            child.receiveShadow = true;
+            
+            // Avatar-Materialien heller machen
+            if (child.material) {
+              // Wenn es ein Array von Materialien ist
+              if (Array.isArray(child.material)) {
+                child.material.forEach(mat => {
+                  if (mat.color) {
+                    // Farben 50% heller machen
+                    mat.color.multiplyScalar(1.5);
+                  }
+                  // Emissive Farbe hinzufügen für zusätzliche Helligkeit
+                  if (mat.emissive) {
+                    mat.emissive.setHex(0x222222);
+                  }
+                });
+              } else {
+                // Einzelnes Material
+                if (child.material.color) {
+                  child.material.color.multiplyScalar(1.5);
+                }
+                if (child.material.emissive) {
+                  child.material.emissive.setHex(0x222222);
+                }
+              }
+            }
+          }
+        });
+        
+        // Zusätzliches Spotlicht direkt auf den Avatar
+        const avatarSpotlight = new THREE.SpotLight(0xffffff, 1.0);
+        avatarSpotlight.position.set(0, 8, 3);
+        avatarSpotlight.target.position.set(0, 1, 0);
+        avatarSpotlight.angle = Math.PI / 6;
+        avatarSpotlight.penumbra = 0.3;
+        avatarSpotlight.decay = 0;
+        scene.add(avatarSpotlight);
+        scene.add(avatarSpotlight.target);
+        
+        // Zusätzliches Punktlicht vor dem Avatar
+        const avatarPointLight = new THREE.PointLight(0xffffff, 0.8, 10);
+        avatarPointLight.position.set(0, 2, 2);
+        scene.add(avatarPointLight);
+        
+        // Kamera-Position anpassen - näher und auf Augenhöhe
+        const maxDim = Math.max(modelSize.x, modelSize.y, modelSize.z);
+        const avatarHeight = modelSize.y;
+        
+        // Kamera frontal vor Avatar auf Augenhöhe positionieren
+        camera.position.set(0, avatarHeight * 0.7, maxDim * 0.8); // Viel näher herangezoomt
+        controls.target.set(0, avatarHeight * 0.6, 0); // Blick auf Gesicht/Oberkörper
+        controls.update();
+        
+        // Zoom-Grenzen anpassen für bessere Kontrolle
+        controls.minDistance = maxDim * 0.3;
+        controls.maxDistance = maxDim * 3;
+        
+        // Loading verstecken
+        loadingElement.style.display = 'none';
+        
+        console.log('Avatar erfolgreich geladen!');
+      },
+      (progress) => {
+        const percent = Math.round((progress.loaded / progress.total) * 100);
+        loadingElement.textContent = `Avatar wird geladen... ${percent}%`;
+        console.log('Ladefortschritt:', percent + '%');
+      },
+      (error) => {
+        console.error('Fehler beim Laden des Avatars:', error);
+        loadingElement.textContent = 'Fehler beim Laden des Avatars!';
+        loadingElement.style.color = 'red';
+      }
+    );
+
+    // Resize-Handling
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // Animationsloop
+    function animate() {
+      requestAnimationFrame(animate);
+      
+      // Animation-Mixer updaten
+      if (mixer) {
+        mixer.update(clock.getDelta());
+      }
+      
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    animate();
+  </script>
+</body>
+</html>
+  </script>
+</body>
+</html>
