@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,29 +8,52 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=CMU+Serif&display=swap">
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <div class="container">
         <div class="header">
-            <img src="assets/images/profilbild.jpg" alt="Profilbild von Luis">
+            <div class="profile-image-container">
+                <img src="assets/images/profilbild.jpg" alt="Profilbild von Luis" class="profile-main">
+                <img src="assets/images/werwolf.jpeg" alt="Werwolf Profilbild" class="profile-hover">
+            </div>
             <h1>Luis Antonio Gálvez Bommer</h1>
             <p>Fachinformatiker für Anwendungsentwicklung</p>
         </div>
+
+        <!-- Video Modal -->
+        <div id="videoModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <video id="werwolfVideo" controls>
+                    <source src="assets/videos/werwolf-video.mp4" type="video/mp4">
+                </video>
+            </div>
+        </div>
+
         <div class="section about-me">
             <h2>Über mich 👦<a href="avatar.html">(3D Avatar)</a></h2>
-            <p>Mein Wunsch ist es, mit Technologie zu einem einfacheren und besseren Leben beizutragen 🐺 🏳️‍🌈 🙏 ❤️ <a href="assets/Lebenslauf_Luis.pdf">Lebenslauf.pdf</a></p>
-            <a href="https://www.16personalities.com/de/ergebnisse/infp-t/m/hq4fy2b7v">Mein Persönlichkeitstest</a> und <a href="https://www.16personalities.com/de/infp-personlichkeit?utm_source=results-turbulent-mediator&utm_medium=email&utm_campaign=de&utm_content=view-results">mein Persönlichkeitstyp</a>
+            <p>Mein Wunsch ist es, mit Technologie zu einem einfacheren und besseren Leben beizutragen 🐺 🏳️‍🌈 🙏 ❤️
+                <a href="assets/Lebenslauf_Luis.pdf">Lebenslauf.pdf</a>
+            </p>
+            <a href="https://www.16personalities.com/de/ergebnisse/infp-t/m/hq4fy2b7v">Mein Persönlichkeitstest</a> und
+            <a
+                href="https://www.16personalities.com/de/infp-personlichkeit?utm_source=results-turbulent-mediator&utm_medium=email&utm_campaign=de&utm_content=view-results">mein
+                Persönlichkeitstyp</a>
             <p></p>
-            <a href="photos.html">Mein Lebenslauf in Bildern</a>    🖼️
+            <a href="photos.html">Mein Lebenslauf in Bildern</a> 🖼️
         </div>
         <div class="section personal-info">
             <h2>Persönliche Daten 📞</h2>
-            <p><strong>Geburtsinfo:</strong> 18.07.1997 in Esslingen am Neckar <a href="https://www.allabouthumandesign.de/chart/meine-chart?n=Luis+Antonio+Galvez+Bommer&d=18-7-1997T07%3A21&l=Esslingen+am+Neckar%2C+Deutschland&lat=48.742178&lon=9.3144229&tz=Europe%2FBerlin&f=pytz">(Human Design Chart)</a></p>
+            <p><strong>Geburtsinfo:</strong> 18.07.1997 in Esslingen am Neckar <a
+                    href="https://www.allabouthumandesign.de/chart/meine-chart?n=Luis+Antonio+Galvez+Bommer&d=18-7-1997T07%3A21&l=Esslingen+am+Neckar%2C+Deutschland&lat=48.742178&lon=9.3144229&tz=Europe%2FBerlin&f=pytz">(Human
+                    Design Chart)</a></p>
             <p><strong>Adresse:</strong> Hunklinge 103, 70191 Stuttgart</p>
             <p><strong>Telefon:</strong> +49 159 06665235</p>
             <p><strong>E-Mail:</strong> luisgalvezbommer@gmail.com</p>
         </div>
         <div class="section education">
-            <h2>Schulische und berufliche Bildung 👨‍🎓<a id="zeugnisse" href="assets/Luis_Alle_Zeugnisse_Uni_Schule.pdf" target="_blank">(Zeugnisse.pdf)</a></h2>
+            <h2>Schulische und berufliche Bildung 👨‍🎓<a id="zeugnisse"
+                    href="assets/Luis_Alle_Zeugnisse_Uni_Schule.pdf" target="_blank">(Zeugnisse.pdf)</a></h2>
             <p><strong>Grundschule:</strong> Körschtalschule in Stuttgart Plieningen (2003-2007)</p>
             <p><strong>Gymnasium:</strong> Paracelsus-Gymnasium-Hohenheim (2007-2015)</p>
             <p><strong>Universität:</strong> Elektro- und Informationstechnik, Universität Stuttgart (2015-2019)</p>
@@ -42,7 +66,7 @@
                         <option value="all">Alle Datensätze anzeigen</option>
                         <option value="average">Durchschnitt</option>
                         <hr>
-                    <!-- Optionen werden per JavaScript eingefügt -->
+                        <!-- Optionen werden per JavaScript eingefügt -->
                     </select>
                     <span id="averageDisplay">Durchschnitt: 0</span>
                 </div>
@@ -80,41 +104,54 @@
             <p><strong>Cloud Computing: </strong>Gridscale, Openstack</p>
             <p><strong>Sonstiges: </strong>Arduino, fischertechnik</p>
             <p>
-                <strong>Meine Internetprofile: </strong><a href="https://gitlab.com/lagb18071997" target="_blank">GitLab</a>, 
-                </strong><a href="https://github.com/luisgalvezbommer" target="_blank">GitHub</a>, 
-                <a href="https://www.sololearn.com/de/profile/11668607" target="_blank">Sololearn</a>, 
+                <strong>Meine Internetprofile: </strong><a href="https://gitlab.com/lagb18071997"
+                    target="_blank">GitLab</a>,
+                </strong><a href="https://github.com/luisgalvezbommer" target="_blank">GitHub</a>,
+                <a href="https://www.sololearn.com/de/profile/11668607" target="_blank">Sololearn</a>,
                 <a href="https://www.kaggle.com/luisgalvezbommer" target="_blank">kaggle</a>
             </p>
         </div>
         <div class="section further">
             <h2>Sonstiges 💁‍♂️</h2>
-            <p><strong>Sprachen: </strong>Deutsch (Muttersprache), Englisch (fließend), Französisch (B1), Russisch (A1/A2)</p>
+            <p><strong>Sprachen: </strong>Deutsch (Muttersprache), Englisch (fließend), Französisch (B1), Russisch
+                (A1/A2)</p>
             <p><strong>Hobbys: </strong>Spiele, Spazieren gehen, Leute treffen, Mathematik, Informatik, träumen</p>
             <p><strong>Interessen: </strong></p>
             <ul>
                 <li><strong>Philosphie und Religion ~ </strong>Alles</li>
                 <li><strong>Mathematik ~ </strong>Mengenlehre, Algebra, Kategorientheorie, Aussagenlogik</li>
-                <li><strong>Technik ~ </strong>Künstliche Intelligenz, Blockchain, IoT, eState, eGovernment, Open Data, Autonomes Fahren, Augmented Reality</li>
+                <li><strong>Technik ~ </strong>Künstliche Intelligenz, Blockchain, IoT, eState, eGovernment, Open Data,
+                    Autonomes Fahren, Augmented Reality</li>
             </ul>
-            <p><strong>Meine DNA: </strong><a href="https://www.ancestry.com/dna/origins/share/8c516b63-4963-418d-85ed-316964dbde6b" target="_blank">Ancestry</a></p>
+            <p><strong>Meine DNA: </strong><a
+                    href="https://www.ancestry.com/dna/origins/share/8c516b63-4963-418d-85ed-316964dbde6b"
+                    target="_blank">Ancestry</a></p>
             <p><strong>Mein Stammbaum: </strong><a href="assets/Luis_Stammbaum.pdf">Stammbaum.pdf</a></p>
-            <p><strong>Mein Portfolio: </strong><a href="https://www.etoro.com/de/people/30fchmrs/portfolio" target="_blank">eToro</a></p>
+            <p><strong>Mein Portfolio: </strong><a href="https://www.etoro.com/de/people/30fchmrs/portfolio"
+                    target="_blank">eToro</a></p>
         </div>
         <div class="section quotes">
             <h2>Zitate die ich mag ✒️</h2>
-            <p><strong>Plotin ~</strong> Schönheit ist das Durchleuchten des ewigen Glanzes des einen in die materielle Erscheinung</p>
+            <p><strong>Plotin ~</strong> Schönheit ist das Durchleuchten des ewigen Glanzes des einen in die materielle
+                Erscheinung</p>
             <p><strong>Benjamin Franklin ~</strong> Zeit ist Geld</p>
             <p><strong>James Prescott Joule ~</strong> Leistung ist Arbeit pro Zeit &#40; W = P * t &#41;</p>
             <p><strong>Jesus ~</strong> Glückselig die Armen im Geist, denn <i>ihrer</i> ist das Reich der Himmel</p>
             <p><strong>Jesus ~</strong> Glückselig die Sanftmütigen, denn <i>sie</i> werden das Land erben</p>
-            <p><strong>Bhagavad Gita ~</strong> Das höchste Wissen ist zu wissen, dass man nichts besitzt und nichts kontrolliert</p>
-            <p><strong>Bibel Sprüche ~</strong> Nichts nützt Reichtum am Tag des Zornes, Gerechtigkeit aber rettet vom Tod</p>
-            <p><strong>Hiob ~</strong> Siehe, die Furcht des Herren, sie ist Weisheit, und vom Bösen weichen, das ist Einsicht</p>
+            <p><strong>Bhagavad Gita ~</strong> Das höchste Wissen ist zu wissen, dass man nichts besitzt und nichts
+                kontrolliert</p>
+            <p><strong>Bibel Sprüche ~</strong> Nichts nützt Reichtum am Tag des Zornes, Gerechtigkeit aber rettet vom
+                Tod</p>
+            <p><strong>Hiob ~</strong> Siehe, die Furcht des Herren, sie ist Weisheit, und vom Bösen weichen, das ist
+                Einsicht</p>
             <p><strong>ChatGPT ~</strong> Reales Wachstum basiert auf produktiven Investitionen und Innovationen</p>
             <p><strong>Maharishi ~</strong> Aus dem Samen entsteht der Baum und aus dem Baum der Same</p>
-            <p><strong>Bibel Sprüche ~</strong> Menschenfurcht stellt eine Falle; wer aber auf den HERRN vertraut, ist in Sicherheit</p>
-            <p><strong>Mengenlehre ~</strong> Aus der Leere entstand die 0, aus der Sammlung der Leere die 1, und so wuchsen die Zahlen</p>
-            <p><strong>Maharishi ~</strong> Jeder Mensch hat die Fähigkeit, mit göttlichem Glanz die ganze Schöpfung zu durchstrahlen</p>
+            <p><strong>Bibel Sprüche ~</strong> Menschenfurcht stellt eine Falle; wer aber auf den HERRN vertraut, ist
+                in Sicherheit</p>
+            <p><strong>Mengenlehre ~</strong> Aus der Leere entstand die 0, aus der Sammlung der Leere die 1, und so
+                wuchsen die Zahlen</p>
+            <p><strong>Maharishi ~</strong> Jeder Mensch hat die Fähigkeit, mit göttlichem Glanz die ganze Schöpfung zu
+                durchstrahlen</p>
             <p><strong>Atwood ~ </strong>Und am Ende werden wir alle zu Geschichten</p>
             <p><strong>Schwester ~ </strong>Zeig es mir so, so dass <i>ich</i> es verstehe</p>
         </div>
@@ -140,9 +177,72 @@
         </div>
     </div>
     <img src="assets/images/regenbogen.png" alt="Regenbogen" class="fixed-image">
+    <script>
+        // Dark theme toggle for profile image hover
+        const profileContainer = document.querySelector('.profile-image-container');
+        const body = document.body;
+        const werwolfImage = document.querySelector('.profile-hover');
+        const videoModal = document.getElementById('videoModal');
+        const video = document.getElementById('werwolfVideo');
+        const closeBtn = document.querySelector('.close');
+        const headerTitle = document.querySelector('.header h1');
+        const headerSubtitle = document.querySelector('.header p');
+
+        // Store original text content
+        const originalTitle = headerTitle.textContent;
+        const originalSubtitle = headerSubtitle.textContent;
+
+        profileContainer.addEventListener('mouseenter', function () {
+            body.classList.add('dark-theme');
+            // Change text content when hovering
+            headerTitle.textContent = 'Ich bin ein Wolf doch Mensch im Schein';
+            headerSubtitle.textContent = '- Luis';
+        });
+
+        profileContainer.addEventListener('mouseleave', function () {
+            body.classList.remove('dark-theme');
+            // Restore original text content
+            headerTitle.textContent = originalTitle;
+            headerSubtitle.textContent = originalSubtitle;
+        });
+
+        // Video modal functionality
+        werwolfImage.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            videoModal.style.display = 'block';
+            video.play();
+        });
+
+        // Close modal when clicking the X
+        closeBtn.addEventListener('click', function () {
+            videoModal.style.display = 'none';
+            video.pause();
+            video.currentTime = 0;
+        });
+
+        // Close modal when clicking outside the video
+        videoModal.addEventListener('click', function (e) {
+            if (e.target === videoModal) {
+                videoModal.style.display = 'none';
+                video.pause();
+                video.currentTime = 0;
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && videoModal.style.display === 'block') {
+                videoModal.style.display = 'none';
+                video.pause();
+                video.currentTime = 0;
+            }
+        });
+    </script>
 </body>
 <!-- Include Chart.js from a CDN -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <!-- Use the new index file -->
 <script type="module" src="index.js"></script>
+
 </html>

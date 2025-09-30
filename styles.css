@@ -1,3 +1,8 @@
+/* Global box-sizing and overflow prevention */
+* {
+    box-sizing: border-box;
+}
+
 /* Ganzseitiger Hintergrund */
 body {
     margin: 0;
@@ -5,49 +10,180 @@ body {
     background: linear-gradient(45deg, #ff6b6b, #f8e71c, #50e3c2, #4a90e2, #9013fe);
     background-size: 300% 300%;
     animation: backgroundAnimation 10s ease infinite;
+    overflow-x: hidden;
+    width: 100%;
+}
+
+body.dark-theme {
+    background: #000000;
+    color: white;
+    animation: none;
 }
 
 .container {
     width: 90%;
+    max-width: 100%;
     margin: 20px auto;
     background-color: #fff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
     border-radius: 8px;
+    box-sizing: border-box;
 }
+
+body.dark-theme .container {
+    background-color: #000000;
+    color: white;
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+}
+
 .header {
     text-align: center;
     min-height: 100vh;
 }
+
+body.dark-theme .header {
+    background-color: #000000;
+    color: white;
+}
+
 .header img {
     border-radius: 9999px;
     height: auto;
     max-width: 100%;
     min-width: 120px;
+    cursor: pointer;
 }
+
+.header .profile-image-container {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+}
+
+.header .profile-image-container img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+.header .profile-image-container .profile-hover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+}
+
+.header .profile-image-container:hover .profile-hover {
+    opacity: 1;
+}
+
+.header .profile-image-container:hover .profile-main {
+    opacity: 0;
+}
+
+/* Make rainbow image fit as profile picture */
+.header .profile-image-container .profile-hover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Dark theme text colors */
+body.dark-theme h1,
+body.dark-theme h2,
+body.dark-theme p,
+body.dark-theme li {
+    color: white;
+}
+
+body.dark-theme .section h2 {
+    color: white;
+    border-bottom-color: white;
+}
+
+body.dark-theme a {
+    color: #87CEEB;
+}
+
+/* Video Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.9);
+}
+
+.modal-content {
+    position: relative;
+    background-color: #000;
+    margin: 5% auto;
+    padding: 20px;
+    width: 90%;
+    max-width: 800px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.close {
+    color: #fff;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: #ccc;
+    text-decoration: none;
+}
+
+#werwolfVideo {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
 .header h1 {
     margin: 10px 0;
     font-size: 1.5em;
 }
+
 .section {
     margin-top: 20px;
 }
+
 .section h2 {
     color: #333;
     border-bottom: 2px solid #333;
     padding-bottom: 5px;
     font-size: 1.3em;
 }
+
 .section p {
     line-height: 1.6;
     font-size: 1em;
 }
 
-.personal-info, .education, .experience, .skills {
+.personal-info,
+.education,
+.experience,
+.skills {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
+
 .personal-info p {
     margin: 0;
 }
@@ -103,7 +239,7 @@ a {
     animation: backgroundAnimation 2s ease infinite;
 }
 
-.controls > * {
+.controls>* {
     margin: 0 10px;
 }
 
@@ -127,9 +263,17 @@ a {
 
 /* Animation für den Farbwechsel */
 @keyframes backgroundAnimation {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 
@@ -138,27 +282,31 @@ a {
     .header h1 {
         font-size: 1.2em;
     }
+
     .section h2 {
         font-size: 1.2em;
     }
+
     .section p {
         font-size: 0.9em;
     }
+
     .fixed-image {
         display: none
     }
+
     .controls {
         display: flex;
         flex-direction: column;
         width: 80%;
     }
 
-    .controls > * {
+    .controls>* {
         margin: 5px 0;
         margin-left: 30px;
     }
 
-    .controls > select {
+    .controls>select {
         width: 50%;
     }
 }
