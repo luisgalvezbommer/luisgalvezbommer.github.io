@@ -20,6 +20,9 @@
             <p>Fachinformatiker für Anwendungsentwicklung</p>
         </div>
 
+        <!-- Glitter Effect Container -->
+        <div id="glitterContainer" class="glitter-container"></div>
+
         <!-- Audio element for werwolf music -->
         <audio id="werwolfAudio" preload="metadata" loop>
             <source src="assets/music/werwolf.mp3" type="audio/mpeg">
@@ -158,7 +161,7 @@
                 wuchsen die Zahlen</p>
             <p><strong>Maharishi ~</strong> Jeder Mensch hat die Fähigkeit, mit göttlichem Glanz die ganze Schöpfung zu
                 durchstrahlen</p>
-            <p><strong>Grace</strong>Ich kenne meinen Namen nicht</p>
+            <p><strong>Grace ~ </strong>Ich kenne meinen Namen nicht</p>
             <p><strong>Atwood ~ </strong>Und am Ende werden wir alle zu Geschichten</p>
             <p><strong>Schwester ~ </strong>Zeig es mir so, so dass <i>ich</i> es verstehe</p>
         </div>
@@ -195,6 +198,7 @@
         const headerTitle = document.querySelector('.header h1');
         const headerSubtitle = document.querySelector('.header p');
         const werwolfAudio = document.getElementById('werwolfAudio');
+        const glitterContainer = document.getElementById('glitterContainer');
 
         // Store original text content
         const originalTitle = headerTitle.textContent;
@@ -244,6 +248,73 @@
             }, 25);
         }
 
+        // Glitter effect functions
+        let glitterInterval = null;
+        let activeGlitters = [];
+
+        function createGlitter() {
+            const glitter = document.createElement('div');
+            glitter.className = 'glitter';
+
+            // Random position
+            glitter.style.left = Math.random() * 100 + '%';
+            glitter.style.top = Math.random() * 100 + '%';
+
+            // Random animation duration (3-6 seconds)
+            const duration = Math.random() * 3 + 3;
+            glitter.style.animationDuration = duration + 's';
+
+            // Random delay for variety
+            glitter.style.animationDelay = Math.random() * 2 + 's';
+
+            glitterContainer.appendChild(glitter);
+            activeGlitters.push(glitter);
+
+            // Remove glitter after animation completes
+            setTimeout(() => {
+                if (glitter.parentNode) {
+                    glitter.parentNode.removeChild(glitter);
+                }
+                activeGlitters = activeGlitters.filter(g => g !== glitter);
+            }, (duration + 2) * 1000);
+        }
+
+        function startGlitter() {
+            glitterContainer.classList.add('active');
+
+            // Create initial burst of glitter
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => createGlitter(), i * 100);
+            }
+
+            // Continue creating glitter periodically
+            glitterInterval = setInterval(() => {
+                createGlitter();
+                if (Math.random() > 0.7) {
+                    createGlitter(); // Sometimes create two at once
+                }
+            }, 200);
+        }
+
+        function stopGlitter() {
+            glitterContainer.classList.remove('active');
+
+            if (glitterInterval) {
+                clearInterval(glitterInterval);
+                glitterInterval = null;
+            }
+
+            // Let existing glitter finish falling, then clear
+            setTimeout(() => {
+                activeGlitters.forEach(glitter => {
+                    if (glitter.parentNode) {
+                        glitter.parentNode.removeChild(glitter);
+                    }
+                });
+                activeGlitters = [];
+            }, 2000);
+        }
+
         // Initialize audio on any user interaction
         document.addEventListener('click', initializeAudio, { once: true });
         document.addEventListener('keydown', initializeAudio, { once: true });
@@ -254,6 +325,9 @@
             // Change text content when hovering
             headerTitle.textContent = 'Ich bin ein Wolf doch Mensch im Schein';
             headerSubtitle.textContent = '- Luis';
+
+            // Start glitter effect
+            startGlitter();
 
             // Initialize and play audio
             initializeAudio();
@@ -272,6 +346,8 @@
             headerSubtitle.textContent = originalSubtitle;
             // Fade out and pause music
             fadeOutAudio();
+            // Stop glitter effect
+            stopGlitter();
         });
 
         // Video modal functionality
