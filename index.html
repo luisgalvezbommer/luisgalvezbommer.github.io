@@ -20,6 +20,12 @@
             <p>Fachinformatiker für Anwendungsentwicklung</p>
         </div>
 
+        <!-- Audio element for werwolf music -->
+        <audio id="werwolfAudio" preload="metadata" loop>
+            <source src="assets/music/werwolf.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+
         <!-- Video Modal -->
         <div id="videoModal" class="modal">
             <div class="modal-content">
@@ -187,16 +193,75 @@
         const closeBtn = document.querySelector('.close');
         const headerTitle = document.querySelector('.header h1');
         const headerSubtitle = document.querySelector('.header p');
+        const werwolfAudio = document.getElementById('werwolfAudio');
 
         // Store original text content
         const originalTitle = headerTitle.textContent;
         const originalSubtitle = headerSubtitle.textContent;
+
+        // Initialize audio on first user interaction
+        let audioInitialized = false;
+        let fadeTimeout = null;
+
+        function initializeAudio() {
+            if (!audioInitialized) {
+                werwolfAudio.volume = 0.6; // Set to 60% volume
+                audioInitialized = true;
+                console.log('Audio initialized');
+            }
+        }
+
+        function fadeInAudio() {
+            if (fadeTimeout) clearTimeout(fadeTimeout);
+            let volume = 0;
+            werwolfAudio.volume = 0;
+
+            const fadeIn = setInterval(() => {
+                volume += 0.05;
+                if (volume >= 0.6) {
+                    volume = 0.6;
+                    clearInterval(fadeIn);
+                }
+                werwolfAudio.volume = volume;
+            }, 25);
+        }
+
+        function fadeOutAudio() {
+            if (fadeTimeout) clearTimeout(fadeTimeout);
+            let volume = werwolfAudio.volume;
+
+            const fadeOut = setInterval(() => {
+                volume -= 0.05;
+                if (volume <= 0) {
+                    volume = 0;
+                    werwolfAudio.volume = 0;
+                    werwolfAudio.pause();
+                    clearInterval(fadeOut);
+                } else {
+                    werwolfAudio.volume = volume;
+                }
+            }, 25);
+        }
+
+        // Initialize audio on any user interaction
+        document.addEventListener('click', initializeAudio, { once: true });
+        document.addEventListener('keydown', initializeAudio, { once: true });
+        document.addEventListener('touchstart', initializeAudio, { once: true });
 
         profileContainer.addEventListener('mouseenter', function () {
             body.classList.add('dark-theme');
             // Change text content when hovering
             headerTitle.textContent = 'Ich bin ein Wolf doch Mensch im Schein';
             headerSubtitle.textContent = '- Luis';
+
+            // Initialize and play audio
+            initializeAudio();
+            werwolfAudio.play().then(() => {
+                fadeInAudio();
+                console.log('Audio started playing');
+            }).catch(error => {
+                console.log('Audio play failed:', error);
+            });
         });
 
         profileContainer.addEventListener('mouseleave', function () {
@@ -204,6 +269,8 @@
             // Restore original text content
             headerTitle.textContent = originalTitle;
             headerSubtitle.textContent = originalSubtitle;
+            // Fade out and pause music
+            fadeOutAudio();
         });
 
         // Video modal functionality
