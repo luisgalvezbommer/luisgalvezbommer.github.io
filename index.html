@@ -85,7 +85,8 @@
         </div>
         <div class="section break">
             <h2>Berufliche Auszeit 🛏️</h2>
-            <p>2019-2020: Psychatrie Kirchheim <i>(Diagnose: Paranoide Schizophrenie --> Seitdem Medikamente 💊)</i></p>
+            <p>2019-2020: Psychatrie Kirchheim <i>(Diagnose: Paranoide Schizophrenie --> Seitdem Medikamente (550 mg
+                    Quetiapin, 500 mg Amilsuprid, 100 mg Sertralin) 💊)</i></p>
             <p>2020-2022: Medizinische Rehabilitation (Praktika als Landschaftsgärtner, Hausmeister und Elektriker)</p>
             <p>2022: Berufliche Rehabilitation (Praktika im Lager und IT-Bereich)</p>
         </div>
@@ -146,6 +147,13 @@
                         </ul>
                     </ul>
                 </li>
+                <li>
+                    <strong>Sport</strong>
+                    <ul>
+                        <li>Damals: Fußball 6 - 12<i>(Position: Verteidiger, Mittelfeld)</i>, Tischtennis 12 - 14</li>
+                        <li>Heute: Fitnessstudio</li>
+                    </ul>
+                </li>
                 <li><strong>Spazieren gehen, Leute treffen, Mathematik und Informatik, Träumen, Meditation & Beten,
                         Bibel lesen</strong></li>
             </ul>
@@ -197,6 +205,14 @@
                         <li><strong>Beruf ~ </strong>Master in Medizin, Beruf Ärztin</li>
                     </ul>
                 </li>
+            </ul>
+            <p><strong>Besuchte Länder: </strong></p>
+            <ul>
+                <li>Europa: Deutschland (Stuttgart, München, Hamburg, Berlin, Leipzig), Frankreich (Paris, Nizza,
+                    Cannes), Spanien (Barcelona), Kroatien (Zagreb),
+                    Italien (Venedig), Monaco, Niederlande (Amsterdam),
+                    Österreich (Tirol), Schweiz, Portugal (Tabua), Malta, Schottland (Edinburgh)</li>
+                <li>Amerika: Mexiko (Hermosillo, Mexiko City)</li>
             </ul>
         </div>
         <div class="section quotes">
@@ -259,10 +275,18 @@
         const headerSubtitle = document.querySelector('.header p');
         const werwolfAudio = document.getElementById('werwolfAudio');
         const glitterContainer = document.getElementById('glitterContainer');
+        const container = document.querySelector('.container');
 
         // Store original text content
         const originalTitle = headerTitle.textContent;
         const originalSubtitle = headerSubtitle.textContent;
+
+        // Fade in container when page loads
+        window.addEventListener('load', function () {
+            setTimeout(() => {
+                container.classList.add('loaded');
+            }, 100); // Small delay to ensure smooth animation
+        });
 
         // Initialize audio on first user interaction
         let audioInitialized = false;
