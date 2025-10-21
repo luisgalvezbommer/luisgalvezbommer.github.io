@@ -285,6 +285,13 @@ a {
     font-style: italic;
 }
 
+#my-first-program {
+    background-color: rgb(53, 53, 194);
+    color: white;
+    padding: 8px;
+    border-radius: 9999px;
+}
+
 #app_download {
     background-color: green;
     color: white;
