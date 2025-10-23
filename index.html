@@ -12,36 +12,79 @@
 <body>
     <div class="container">
         <div class="header">
-            <div class="profile-image-container">
-                <img src="assets/images/profilbild.jpg" alt="Profilbild von Luis" class="profile-main">
-                <img src="assets/images/werwolf.jpeg" alt="Werwolf Profilbild" class="profile-hover">
+            <h1 id="title"></h1>
+            <p id="subtitle"></p>
+            <div id="image-background">
+                <img src="assets/images/horizont.jpg" alt="Hintergrundbild Horizont" id="background-image">
             </div>
-            <h1>Luis Antonio Gálvez Bommer</h1>
-            <p>Fachinformatiker für Anwendungsentwicklung</p>
-        </div>
+            <div class="images-container">
+                <button class="carousel-nav prev" aria-label="Previous">❮</button>
+                <button class="carousel-nav next" aria-label="Next">❯</button>
 
-        <!-- Glitter Effect Container -->
-        <div id="glitterContainer" class="glitter-container"></div>
+                <div class="carousel-wrapper">
+                    <div class="image-container">
+                        <img src="assets/images/steinzeit_luis.jpeg" alt="Luis in der Steinzeit"
+                            class="image-main steinzeit">
+                        <h1 class="image-tag">Steinzeit</h1>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets/images/antike_luis.jpeg" alt="Luis in der Antike" class="image-main antike">
+                        <h1 class="image-tag">Antike</h1>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets/images/mönch_luis.jpeg" alt="Luis im Mittelalter"
+                            class="image-main mittelalter">
+                        <h1 class="image-tag">Mittelalter</h1>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets/images/renessaince_luis.jpeg" alt="Luis in der Renessaince"
+                            class="image-main renaissance">
+                        <h1 class="image-tag">Renaissance</h1>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets/images/profilbild_luis_normiert.jpeg" alt="Luis heute"
+                            class="image-main renessaince">
+                        <h1 class="image-tag">Heute</h1>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets/images/zukunft_luis.jpeg" alt="Luis in der Zukunft" class="image-main zukunft">
+                        <h1 class="image-tag">Zukunft</h1>
+                    </div>
+                </div>
 
-        <!-- Audio element for werwolf music -->
-        <audio id="werwolfAudio" preload="metadata" loop>
-            <source src="assets/music/werwolf.mp3" type="audio/mpeg">
+                <div class="carousel-indicators">
+                    <div class="carousel-indicator"></div>
+                    <div class="carousel-indicator"></div>
+                    <div class="carousel-indicator"></div>
+                    <div class="carousel-indicator"></div>
+                    <div class="carousel-indicator"></div>
+                    <div class="carousel-indicator"></div>
+                </div>
+            </div>
+        </div> <!-- Glitter Effect Container -->
+        <!-- <div id="glitterContainer" class="glitter-container"></div> -->
+
+        <!-- Audio element for carousel music -->
+        <audio id="carouselAudio" preload="metadata" loop>
+            <source src="assets/music/background_music.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
 
         <!-- Video Modal -->
-        <div id="videoModal" class="modal">
+        <!-- <div id="videoModal" class="modal">
             <div class="modal-content">
                 <span class="close">&times;</span>
                 <video id="werwolfVideo" controls>
                     <source src="assets/videos/werwolf-video.mp4" type="video/mp4">
                 </video>
             </div>
-        </div>
+        </div> -->
 
         <div class="section about-me">
             <h2>Über mich 👦<a href="avatar.html">(3D Avatar)</a></h2>
-            <p>Mein Wunsch ist es, mit Technologie zu einem einfacheren und besseren Leben beizutragen 🐺 🏳️‍🌈 🙏 ❤️
+            <p>Ich bin mehr als nur mein Name</p>
+            <p>Und mein Wunsch ist es, mit Technologie zu einem einfacheren und besseren Leben beizutragen 🐺 🏳️‍🌈 🙏
+                ❤️
                 <a href="assets/Lebenslauf_Luis.pdf">Lebenslauf.pdf</a>
             </p>
             <a href="https://www.16personalities.com/de/ergebnisse/infp-t/m/hq4fy2b7v">Mein Persönlichkeitstest</a> und
@@ -281,210 +324,262 @@
         </div>
     </div>
     <img src="assets/images/regenbogen.png" alt="Regenbogen" class="fixed-image">
+
+    <!-- 3D Carousel Script -->
     <script>
-        // Dark theme toggle for profile image hover
-        const profileContainer = document.querySelector('.profile-image-container');
-        const body = document.body;
-        const werwolfImage = document.querySelector('.profile-hover');
-        const videoModal = document.getElementById('videoModal');
-        const video = document.getElementById('werwolfVideo');
-        const closeBtn = document.querySelector('.close');
-        const headerTitle = document.querySelector('.header h1');
-        const headerSubtitle = document.querySelector('.header p');
-        const werwolfAudio = document.getElementById('werwolfAudio');
-        const glitterContainer = document.getElementById('glitterContainer');
-        const container = document.querySelector('.container');
+        // 3D Carousel functionality
+        class Carousel3D {
+            constructor() {
+                this.items = document.querySelectorAll('.image-container');
+                this.prevBtn = document.querySelector('.carousel-nav.prev');
+                this.nextBtn = document.querySelector('.carousel-nav.next');
+                this.indicators = document.querySelectorAll('.carousel-indicator');
+                this.container = document.querySelector('.images-container');
+                this.currentIndex = 0;
+                this.totalItems = this.items.length;
+                this.touchStartX = 0;
+                this.touchEndX = 0;
+                this.audio = document.getElementById('carouselAudio');
+                this.isPlaying = false;
 
-        // Store original text content
-        const originalTitle = headerTitle.textContent;
-        const originalSubtitle = headerSubtitle.textContent;
-
-        // Fade in container when page loads
-        window.addEventListener('load', function () {
-            setTimeout(() => {
-                container.classList.add('loaded');
-            }, 100); // Small delay to ensure smooth animation
-        });
-
-        // Initialize audio on first user interaction
-        let audioInitialized = false;
-        let fadeTimeout = null;
-
-        function initializeAudio() {
-            if (!audioInitialized) {
-                werwolfAudio.volume = 0.6; // Set to 60% volume
-                audioInitialized = true;
-                console.log('Audio initialized');
-            }
-        }
-
-        function fadeInAudio() {
-            if (fadeTimeout) clearTimeout(fadeTimeout);
-            let volume = 0;
-            werwolfAudio.volume = 0;
-
-            const fadeIn = setInterval(() => {
-                volume += 0.05;
-                if (volume >= 0.6) {
-                    volume = 0.6;
-                    clearInterval(fadeIn);
-                }
-                werwolfAudio.volume = volume;
-            }, 25);
-        }
-
-        function fadeOutAudio() {
-            if (fadeTimeout) clearTimeout(fadeTimeout);
-            let volume = werwolfAudio.volume;
-
-            const fadeOut = setInterval(() => {
-                volume -= 0.05;
-                if (volume <= 0) {
-                    volume = 0;
-                    werwolfAudio.volume = 0;
-                    werwolfAudio.pause();
-                    clearInterval(fadeOut);
-                } else {
-                    werwolfAudio.volume = volume;
-                }
-            }, 25);
-        }
-
-        // Glitter effect functions
-        let glitterInterval = null;
-        let activeGlitters = [];
-
-        function createGlitter() {
-            const glitter = document.createElement('div');
-            glitter.className = 'glitter';
-
-            // Random position
-            glitter.style.left = Math.random() * 100 + '%';
-            glitter.style.top = Math.random() * 100 + '%';
-
-            // Random animation duration (3-6 seconds)
-            const duration = Math.random() * 3 + 3;
-            glitter.style.animationDuration = duration + 's';
-
-            // Random delay for variety
-            glitter.style.animationDelay = Math.random() * 2 + 's';
-
-            glitterContainer.appendChild(glitter);
-            activeGlitters.push(glitter);
-
-            // Remove glitter after animation completes
-            setTimeout(() => {
-                if (glitter.parentNode) {
-                    glitter.parentNode.removeChild(glitter);
-                }
-                activeGlitters = activeGlitters.filter(g => g !== glitter);
-            }, (duration + 2) * 1000);
-        }
-
-        function startGlitter() {
-            glitterContainer.classList.add('active');
-
-            // Create initial burst of glitter
-            for (let i = 0; i < 15; i++) {
-                setTimeout(() => createGlitter(), i * 100);
+                this.init();
+            } init() {
+                this.updateCarousel();
+                this.attachEventListeners();
+                this.startAutoPlay();
             }
 
-            // Continue creating glitter periodically
-            glitterInterval = setInterval(() => {
-                createGlitter();
-                if (Math.random() > 0.7) {
-                    createGlitter(); // Sometimes create two at once
-                }
-            }, 200);
-        }
+            attachEventListeners() {
+                this.prevBtn.addEventListener('click', () => this.prev());
+                this.nextBtn.addEventListener('click', () => this.next());
 
-        function stopGlitter() {
-            glitterContainer.classList.remove('active');
+                // Click on items to navigate or toggle music
+                this.items.forEach((item, index) => {
+                    item.addEventListener('click', () => {
+                        if (index !== this.currentIndex) {
+                            this.goToSlide(index);
+                        } else {
+                            // Clicked on center image - toggle music
+                            this.toggleMusic();
+                        }
+                    });
+                });
 
-            if (glitterInterval) {
-                clearInterval(glitterInterval);
-                glitterInterval = null;
+                // Click on indicators
+                this.indicators.forEach((indicator, index) => {
+                    indicator.addEventListener('click', () => this.goToSlide(index));
+                });
+
+                // Keyboard navigation
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowLeft') this.prev();
+                    if (e.key === 'ArrowRight') this.next();
+                });
+
+                // Touch/Swipe support for mobile
+                this.container.addEventListener('touchstart', (e) => {
+                    this.touchStartX = e.changedTouches[0].screenX;
+                }, { passive: true });
+
+                this.container.addEventListener('touchend', (e) => {
+                    this.touchEndX = e.changedTouches[0].screenX;
+                    this.handleSwipe();
+                }, { passive: true });
+
+                // Pause autoplay on hover
+                this.container.addEventListener('mouseenter', () => this.stopAutoPlay());
+                this.container.addEventListener('mouseleave', () => this.startAutoPlay());
             }
 
-            // Let existing glitter finish falling, then clear
-            setTimeout(() => {
-                activeGlitters.forEach(glitter => {
-                    if (glitter.parentNode) {
-                        glitter.parentNode.removeChild(glitter);
+            handleSwipe() {
+                const swipeThreshold = 50;
+                const diff = this.touchStartX - this.touchEndX;
+
+                if (Math.abs(diff) > swipeThreshold) {
+                    if (diff > 0) {
+                        this.next(); // Swipe left
+                    } else {
+                        this.prev(); // Swipe right
+                    }
+                }
+            }
+
+            updateCarousel() {
+                this.items.forEach((item, index) => {
+                    // Remove all position classes
+                    item.classList.remove('center', 'left', 'right', 'hidden');
+
+                    // Calculate position relative to current index
+                    let position = index - this.currentIndex;
+
+                    // Handle wrap-around for circular carousel
+                    if (position < -Math.floor(this.totalItems / 2)) {
+                        position += this.totalItems;
+                    } else if (position > Math.ceil(this.totalItems / 2)) {
+                        position -= this.totalItems;
+                    }
+
+                    // Apply appropriate class based on position
+                    if (position === 0) {
+                        item.classList.add('center');
+                    } else if (position === -1) {
+                        item.classList.add('left');
+                    } else if (position === 1) {
+                        item.classList.add('right');
+                    } else {
+                        item.classList.add('hidden');
                     }
                 });
-                activeGlitters = [];
-            }, 2000);
+
+                // Update indicators
+                this.indicators.forEach((indicator, index) => {
+                    indicator.classList.toggle('active', index === this.currentIndex);
+                });
+
+                // Update music icon if music is playing
+                this.updateMusicIcon();
+            }
+
+            next() {
+                this.currentIndex = (this.currentIndex + 1) % this.totalItems;
+                this.updateCarousel();
+            }
+
+            prev() {
+                this.currentIndex = (this.currentIndex - 1 + this.totalItems) % this.totalItems;
+                this.updateCarousel();
+            }
+
+            goToSlide(index) {
+                this.currentIndex = index;
+                this.updateCarousel();
+            }
+
+            toggleMusic() {
+                if (!this.audio) return;
+
+                // Get the current center image's music icon
+                const centerItem = this.items[this.currentIndex];
+                const imageTag = centerItem ? centerItem.querySelector('.image-tag') : null;
+                let musicIcon = imageTag ? imageTag.querySelector('.music-icon') : null;
+
+                if (this.isPlaying) {
+                    // Fade out and pause
+                    this.fadeOutAudio();
+                    if (musicIcon) {
+                        musicIcon.classList.remove('playing');
+                    }
+                } else {
+                    // Add music icon if it doesn't exist
+                    if (imageTag && !musicIcon) {
+                        musicIcon = document.createElement('span');
+                        musicIcon.className = 'music-icon';
+                        musicIcon.textContent = '🎵';
+                        imageTag.appendChild(musicIcon);
+                    }
+
+                    // Play and fade in
+                    this.audio.volume = 0;
+                    this.audio.play().then(() => {
+                        this.fadeInAudio();
+                        this.isPlaying = true;
+                        if (musicIcon) {
+                            musicIcon.classList.add('playing');
+                        }
+                        console.log('Music started playing');
+                    }).catch(error => {
+                        console.log('Audio play failed:', error);
+                    });
+                }
+            }
+
+            updateMusicIcon() {
+                // Update music icon visibility when carousel slides change
+                this.items.forEach((item, index) => {
+                    const imageTag = item.querySelector('.image-tag');
+                    if (imageTag) {
+                        let musicIcon = imageTag.querySelector('.music-icon');
+
+                        // Add music icon to all items if music is playing
+                        if (this.isPlaying && !musicIcon) {
+                            musicIcon = document.createElement('span');
+                            musicIcon.className = 'music-icon';
+                            musicIcon.textContent = '🎵';
+                            imageTag.appendChild(musicIcon);
+                        }
+
+                        // Toggle playing animation for center item only
+                        if (musicIcon) {
+                            if (index === this.currentIndex && this.isPlaying) {
+                                musicIcon.classList.add('playing');
+                            } else {
+                                musicIcon.classList.remove('playing');
+                            }
+                        }
+                    }
+                });
+            }
+
+            fadeInAudio() {
+                let volume = 0;
+                this.audio.volume = 0;
+                const fadeIn = setInterval(() => {
+                    volume += 0.05;
+                    if (volume >= 0.5) {
+                        volume = 0.5;
+                        clearInterval(fadeIn);
+                    }
+                    this.audio.volume = volume;
+                }, 50);
+            }
+
+            fadeOutAudio() {
+                let volume = this.audio.volume;
+                const fadeOut = setInterval(() => {
+                    volume -= 0.05;
+                    if (volume <= 0) {
+                        volume = 0;
+                        this.audio.volume = 0;
+                        this.audio.pause();
+                        this.isPlaying = false;
+                        clearInterval(fadeOut);
+                    } else {
+                        this.audio.volume = volume;
+                    }
+                }, 50);
+            }
+
+            startAutoPlay() {
+                this.autoPlayInterval = setInterval(() => this.next(), 4000);
+            }
+
+            stopAutoPlay() {
+                if (this.autoPlayInterval) {
+                    clearInterval(this.autoPlayInterval);
+                }
+            }
         }
 
-        // Initialize audio on any user interaction
-        document.addEventListener('click', initializeAudio, { once: true });
-        document.addEventListener('keydown', initializeAudio, { once: true });
-        document.addEventListener('touchstart', initializeAudio, { once: true });
+        // Fade in container when page loads (moved from image-hover.js)
+        window.addEventListener('load', function () {
+            const container = document.querySelector('.container');
+            if (container) {
+                setTimeout(() => {
+                    container.classList.add('loaded');
+                }, 100);
+            }
+        });
 
-        profileContainer.addEventListener('mouseenter', function () {
-            body.classList.add('dark-theme');
-            // Change text content when hovering
-            headerTitle.textContent = 'Ich bin ein Wolf doch Mensch im Schein';
-            headerSubtitle.textContent = 'Gefangen zwischen Herz und Sein';
-
-            // Start glitter effect
-            startGlitter();
-
-            // Initialize and play audio
-            initializeAudio();
-            werwolfAudio.play().then(() => {
-                fadeInAudio();
-                console.log('Audio started playing');
-            }).catch(error => {
-                console.log('Audio play failed:', error);
+        // Initialize carousel when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                new Carousel3D();
             });
-        });
-
-        profileContainer.addEventListener('mouseleave', function () {
-            body.classList.remove('dark-theme');
-            // Restore original text content
-            headerTitle.textContent = originalTitle;
-            headerSubtitle.textContent = originalSubtitle;
-            // Fade out and pause music
-            fadeOutAudio();
-            // Stop glitter effect
-            stopGlitter();
-        });
-
-        // Video modal functionality
-        werwolfImage.addEventListener('click', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-            videoModal.style.display = 'block';
-            video.play();
-        });
-
-        // Close modal when clicking the X
-        closeBtn.addEventListener('click', function () {
-            videoModal.style.display = 'none';
-            video.pause();
-            video.currentTime = 0;
-        });
-
-        // Close modal when clicking outside the video
-        videoModal.addEventListener('click', function (e) {
-            if (e.target === videoModal) {
-                videoModal.style.display = 'none';
-                video.pause();
-                video.currentTime = 0;
-            }
-        });
-
-        // Close modal with Escape key
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape' && videoModal.style.display === 'block') {
-                videoModal.style.display = 'none';
-                video.pause();
-                video.currentTime = 0;
-            }
-        });
+        } else {
+            new Carousel3D();
+        }
     </script>
+    <!-- <script src="image-hover.js"></script> -->
 </body>
 <!-- Include Chart.js from a CDN -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
