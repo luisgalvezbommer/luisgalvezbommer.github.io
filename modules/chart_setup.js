@@ -1,81 +1,102 @@
-import { schoolData } from './schooldata.js';
+const schoolDataUrl = new URL("../assets/schooldata.json", import.meta.url);
 
-// Labels für die X-Achse generieren (Jahr 1 - Sem 1 bis Jahr 12 - Sem 2)
-const labels = [];
-for (let i = 1; i <= 12; i++) {
-    for (let j = 1; j <= 2; j++) {
-        if (j == 2) labels.push(`${i}`);
-        else labels.push(``);
-    }
+async function fetchSchoolData() {
+  const response = await fetch(schoolDataUrl);
+  if (!response.ok) {
+    throw new Error(
+      `Could not load school data JSON: ${response.status} ${response.statusText}`,
+    );
+  }
+  return response.json();
 }
 
-// Notendaten aus `schoolData` extrahieren
-const grades = {};
-for (const subject of Object.values(schoolData.subjects)) {
-    if (subject) {
-        const dataPoints = [];
-        for (const [year, yearObj] of Object.entries(subject.years)) {
-            for (const [semester, semesterObj] of Object.entries(yearObj.semesters)) {               
-                dataPoints.push(semesterObj.getGrade() || null);
-            }
-        }
-        grades[subject.name] = dataPoints;
+function buildLabels(years = 12, semestersPerYear = 2) {
+  const labels = [];
+  for (let year = 1; year <= years; year++) {
+    for (let semester = 1; semester <= semestersPerYear; semester++) {
+      labels.push(semester === semestersPerYear ? `${year}` : ``);
     }
+  }
+  return labels;
 }
 
-export function initializeChart(ctx) {
-    const chart =  new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: []
+function extractDataPoints(subject) {
+  const dataPoints = [];
+  const sortedYears = Object.entries(subject.years || {}).sort(
+    (a, b) => Number(a[0]) - Number(b[0]),
+  );
+
+  for (const [, semesters] of sortedYears) {
+    const sortedSemesters = Object.keys(semesters)
+      .map(Number)
+      .sort((a, b) => a - b);
+
+    for (const semester of sortedSemesters) {
+      const grade = semesters[semester];
+      dataPoints.push(grade ?? null);
+    }
+  }
+
+  return dataPoints;
+}
+
+export async function initializeChart(ctx) {
+  const schoolData = await fetchSchoolData();
+  const labels = buildLabels(schoolData.years, schoolData.semestersPerYear);
+
+  const chart = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: labels,
+      datasets: [],
+    },
+    options: {
+      scales: {
+        y: {
+          min: 0,
+          max: 6,
+          title: {
+            display: true,
+            text: "Note",
+          },
+          grid: {
+            display: false, // Gitter der Y-Achse entfernen
+          },
         },
-        options: {
-            scales: {
-                y: {
-                    min: 0,
-                    max: 6,
-                    title: {
-                        display: true,
-                        text: 'Note'
-                    },
-                    grid: {
-                        display: false // Gitter der Y-Achse entfernen
-                    }
-                },
-                x: {
-                    title: {
-                        display: true,
-                        text: 'Schuljahr'
-                    },
-                    grid: {
-                        display: false // Gitter der X-Achse entfernen
-                    }
-                }
-            },
-            plugins: {
-                legend: {
-                    position: 'right' // Hier wird die Legende nach rechts verschoben
-                }
-            }
-        }
+        x: {
+          title: {
+            display: true,
+            text: "Schuljahr",
+          },
+          grid: {
+            display: false, // Gitter der X-Achse entfernen
+          },
+        },
+      },
+      plugins: {
+        legend: {
+          position: "right", // Hier wird die Legende nach rechts verschoben
+        },
+      },
+    },
+  });
+
+  // Datenpunkte hinzufügen
+  for (const subject of schoolData.subjects || []) {
+    const dataPoints = extractDataPoints(subject);
+    const subjectColor = subject.color || "black";
+    const backgroundColor = subjectColor.includes("rgb")
+      ? subjectColor.replace(")", ", 0.1)").replace("rgb", "rgba")
+      : subjectColor;
+
+    chart.data.datasets.push({
+      label: subject.name,
+      data: dataPoints,
+      borderColor: subjectColor, // Direkt Farbe verwenden
+      backgroundColor: backgroundColor,
+      fill: false,
+      spanGaps: true,
     });
-    // Datenpunkte hinzufügen
-    for (const [subject, dataPoints] of Object.entries(grades)) {
-        const subjectColor = schoolData.getSubject(subject).color; // Farbe des Fachs
-
-        chart.data.datasets.push({
-            label: subject,
-            data: dataPoints,
-            borderColor: subjectColor, // Direkt Farbe verwenden
-            backgroundColor: subjectColor.replace(')', ', 0.1)').replace('rgb', 'rgba'),
-            fill: false,
-            spanGaps: true
-        });
-    }
-    return chart;
+  }
+  return chart;
 }
-
-
-
-
